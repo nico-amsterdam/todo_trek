@@ -4,7 +4,7 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
   alias TodoTrek.Todos
 
   @impl true
-  def render(assigns) do
+  def render(assigns = %{script_src_nonce: _}) do
     ~H"""
     <div>
       <.header><%= @title %></.header>
@@ -24,15 +24,42 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
           </label>
           <h1 class="text-md font-semibold leading-8 text-zinc-800">
             Invite Users
+            <%= raw(to_string @scope.current_user.id) %>
+            <%= raw(inspect(@script_src_nonce)) %>
           </h1>
+                <div id="nico123" phx-hook="RunScript">
+                   <div id="nico12update" phx-update="ignore">
+                     <%= awesomplete(:form, :country,
+                                     [class: "form-control"], 
+                                    %{ url: "https://restcountries.com/v2/all", 
+                                       loadall: true, 
+                                       prepop: true,
+                                       minChars: 1, 
+                                       maxItems: 8, 
+                                       value: "name",
+                                       csp_nonce: @script_src_nonce
+                                    }) %>
+                   </div>
+                </div>
           <div id="notifications" phx-hook="SortableInputsFor" class="space-y-2">
             <.inputs_for :let={f_nested} field={@form[:notifications]}>
               <div class="flex space-x-2 drag-item">
                 <input type="hidden" name="list[notifications_order][]" value={f_nested.index} />
                 <.icon name="hero-bars-3" class="w-6 h-6 relative top-2" data-handle />
-                <.input type="text" field={f_nested[:email]} placeholder="email" />
                 <.input type="text" field={f_nested[:name]} placeholder="name" />
-                <label>
+                <span phx-hook="RunScript" phx-update="ignore" id={"run-notif-#{f_nested.index}"} >
+                     <%= awesomplete(f_nested[:email].form, f_nested[:email].field,
+                                     [class: "form-control"], 
+                                    %{ url: "https://restcountries.com/v2/all", 
+                                       loadall: true, 
+                                       prepop: true,
+                                       minChars: 1, 
+                                       maxItems: 8, 
+                                       value: "name",
+                                       csp_nonce: @script_src_nonce
+                                    }) %>
+                </span>
+                <label id={"col-#{f_nested.index}"} >
                   <input
                     type="checkbox"
                     name="list[notifications_delete][]"
@@ -59,6 +86,7 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
           </.button>
         </:actions>
       </.simple_form>
+      <script nonce={@script_src_nonce} defer phx-track-static type="text/javascript" src={~p"/assets/page-reloaded.js"}></script>
     </div>
     """
   end

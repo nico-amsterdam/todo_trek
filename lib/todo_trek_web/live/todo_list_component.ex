@@ -115,7 +115,7 @@ defmodule TodoTrekWeb.TodoListComponent do
 
     {:ok,
      socket
-     |> assign(list_id: list.id, scope: assigns.scope)
+     |> assign(list_id: list.id, scope: assigns.scope, script_src_nonce: assigns.script_src_nonce)
      |> stream(:todos, todo_forms)}
   end
 

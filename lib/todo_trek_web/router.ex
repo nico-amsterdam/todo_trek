@@ -3,14 +3,41 @@ defmodule TodoTrekWeb.Router do
 
   import TodoTrekWeb.UserAuth
 
+  # @generated_nonce "xyz" 
+  @generated_nonce 10 
+                   |> :crypto.strong_rand_bytes 
+                   |> Base.url_encode64(padding: false)
+
+  # TODO: use a new generated nonce at every page reload (like with the _csrf_token)
+  def assign_script_nonce(%Plug.Conn{} = conn, _) do
+     conn
+     |> assign(:script_src_nonce, @generated_nonce)
+  end
+
+  @host :todo_trek
+        |> Application.compile_env!(TodoTrekWeb.Endpoint)
+        |> Keyword.fetch!(:url)
+        |> Keyword.fetch!(:host)
+
+  @content_security_policy "default-src 'self' 'unsafe-eval' 'unsafe-inline';" <>
+     "connect-src ws://#{@host}:* https://restcountries.com/v2/all;" <>
+     "style-src 'self' 'unsafe-inline' http://nico-amsterdam.github.io/awesomplete-util/css/awesomplete.css;" <>
+     # "script-src 'self' 'unsafe-inline' http://nico-amsterdam.github.io/awesomplete-util/js/awesomplete-v2020.min.js" <>
+     "script-src 'self' 'nonce-" <> @generated_nonce <> "' http://nico-amsterdam.github.io/awesomplete-util/js/awesomplete-v2020.min.js" <>
+                                      " http://nico-amsterdam.github.io/awesomplete-util/js/awesomplete-util.min.js;" <>
+     "img-src 'self' blob: data:;" <>
+     "font-src data:;"
+
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash
     plug :put_root_layout, {TodoTrekWeb.Layouts, :root}
     plug :protect_from_forgery
-    plug :put_secure_browser_headers
     plug :fetch_current_user
+    plug(:put_secure_browser_headers, %{"content-security-policy" => @content_security_policy})
+    plug :assign_script_nonce
   end
 
   pipeline :api do
@@ -21,7 +48,8 @@ defmodule TodoTrekWeb.Router do
     pipe_through :browser
 
     live_session :default,
-      on_mount: [{TodoTrekWeb.UserAuth, :ensure_authenticated}, TodoTrekWeb.Scope] do
+      # socket.assigns needs the nonce to put it on the script tag in the HTML output.
+      on_mount: [{TodoTrekWeb.UserAuth, :ensure_authenticated}, TodoTrekWeb.Scope, {TodoTrekWeb.Nonce, %{script_src_nonce: @generated_nonce}}] do
       live "/", HomeLive, :dashboard
       live "/lists/new", HomeLive, :new_list
       live "/lists/:id/edit", HomeLive, :edit_list
@@ -87,4 +115,5 @@ defmodule TodoTrekWeb.Router do
       live "/users/confirm", UserConfirmationInstructionsLive, :new
     end
   end
+
 end

@@ -52,6 +52,7 @@ defmodule TodoTrek.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
+      {:phoenix_form_awesomplete, github: "nico-amsterdam/phoenix_form_awesomplete", override: true},
       {:plug_cowboy, "~> 2.5"}
     ]
   end

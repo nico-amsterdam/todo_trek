@@ -55,6 +55,38 @@ Hooks.Sortable = {
   }
 }
 
+Hooks.RunScript = {
+    mounted() {
+        const node = this.el
+            , scriptList = node.nodeName === 'SCRIPT' ? [node] : node.querySelectorAll('script:not([data-script-ran])')
+        console.log(this)
+        scriptList.forEach( scriptNode => {
+            let doRunScript = document.createElement('script')
+
+            //copy over the attributes, including nonce and src
+            if (scriptNode.hasAttributes()) {
+                for (const attr of scriptNode.attributes) {
+                    // console.log(attr.nodeName + ' === ' + attr.nodeValue)
+                    if (attr.nodeName === 'nonce') {  // the value of the nonce is not kept in the DOM tree, hence it must be set differently.
+                      // There is no real safe way transfer the nonce to javascript to protect against XSS attacks which also uses javascript.
+                      // So this is a dead end; don't use script tags in liveview componenents and do not use an unsafe eval in your phx-hook.
+                      doRunScript.setAttribute("nonce", document.doNOTdoThis_ItIsReallyUnsafeToKeepTheNonce )
+                    } else {
+                      doRunScript.setAttribute(attr.nodeName, attr.nodeValue)
+                    }
+                }
+            }
+
+            doRunScript.innerHTML = scriptNode.innerHTML; // copy script content
+
+            scriptNode.replaceWith(doRunScript)  // run script
+        })
+    }
+    , destroyed() {
+        console.log(', destroyed')
+    }
+}
+
 Hooks.SortableInputsFor = {
   mounted(){
     let group = this.el.dataset.group
@@ -78,8 +110,10 @@ let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToke
 
 // Show progress bar on live navigation and form submits
 topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
-window.addEventListener("phx:page-loading-start", _info => topbar.show(300))
-window.addEventListener("phx:page-loading-stop", _info => topbar.hide())
+// window.addEventListener("phx:page-loading-start", _info => topbar.show(300))
+// window.addEventListener("phx:page-loading-stop", _info => topbar.hide())
+window.addEventListener("phx:page-loading-start", console.log('start load'))
+window.addEventListener("phx:page-loading-stop", console.log('stop load'))
 
 // connect if there are any LiveViews on the page
 liveSocket.connect()

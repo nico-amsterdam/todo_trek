@@ -86,6 +86,8 @@ defmodule TodoTrekWeb do
       # Core UI components and translation
       import TodoTrekWeb.CoreComponents
       import TodoTrekWeb.Gettext
+      # Awesomplete autocomplete widget
+      import PhoenixFormAwesomplete
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
