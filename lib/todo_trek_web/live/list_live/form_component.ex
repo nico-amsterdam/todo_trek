@@ -48,16 +48,19 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
                 <.icon name="hero-bars-3" class="w-6 h-6 relative top-2" data-handle />
                 <.input type="text" field={f_nested[:name]} placeholder="name" />
                 <span phx-hook="RunScript" phx-update="ignore" id={"run-notif-#{f_nested.index}"} >
-                     <%= awesomplete(f_nested[:email].form, f_nested[:email].field,
-                                     [class: "form-control"], 
-                                    %{ url: "https://restcountries.com/v2/all", 
-                                       loadall: true, 
-                                       prepop: true,
-                                       minChars: 1, 
-                                       maxItems: 8, 
-                                       value: "name",
-                                       csp_nonce: @script_src_nonce
-                                    }) %>
+                   <.input class="form-control" type="text" field={f_nested[:email]} placeholder="email" />
+
+                   <%= awesomplete_script(
+                               f_nested[:email],
+                            %{ url: "https://restcountries.com/v2/all", 
+                               loadall: true, 
+                               prepop: true,
+                               minChars: 1, 
+                               maxItems: 8, 
+                               value: "name",
+                               csp_nonce: @script_src_nonce
+                            }) %>
+
                 </span>
                 <label id={"col-#{f_nested.index}"} >
                   <input
