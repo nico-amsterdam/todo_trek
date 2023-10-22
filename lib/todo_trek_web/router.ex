@@ -3,13 +3,26 @@ defmodule TodoTrekWeb.Router do
 
   import TodoTrekWeb.UserAuth
 
+  @host :todo_trek
+        |> Application.compile_env!(TodoTrekWeb.Endpoint)
+        |> Keyword.fetch!(:url)
+        |> Keyword.fetch!(:host)
+
+  @content_security_policy "default-src 'self';" <>
+     "connect-src ws://#{@host}:* https://restcountries.com/v2/all;" <>
+     "style-src  'self' 'unsafe-inline' http://nico-amsterdam.github.io/awesomplete-util/css/awesomplete.css;" <>
+     "script-src 'self' http://nico-amsterdam.github.io/awesomplete-util/js/awesomplete-v2020.min.js" <>
+                      " http://nico-amsterdam.github.io/awesomplete-util/js/awesomplete-util.min.js;" <>
+     "img-src    'self' blob: data:;" <>
+     "font-src                data:;"
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash
     plug :put_root_layout, {TodoTrekWeb.Layouts, :root}
     plug :protect_from_forgery
-    plug :put_secure_browser_headers
+    plug(:put_secure_browser_headers, %{"content-security-policy" => @content_security_policy})
     plug :fetch_current_user
   end
 
