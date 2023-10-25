@@ -18,7 +18,7 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
         <div class="space-y-4 mb-6">
           <.input field={@form[:title]} type="text" />
           <.inattentive id={"#{@form[:country].id}-offside"}>
-            <.input field={@form[:country]} type="text" placeHolder="Country autocomplete test" />
+            <.input field={@form[:country]} type="text" placeholder="Country autocomplete test" />
             <.autocomplete    for_field={@form[:country]}
                               url="https://restcountries.com/v2/all"
                               loadall="true"
