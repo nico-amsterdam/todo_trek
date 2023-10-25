@@ -653,4 +653,81 @@ defmodule TodoTrekWeb.CoreComponents do
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
   end
+
+  @doc """
+  Convenient way to set phx-update="ignore".
+  """
+  attr :id, :string, required: true 
+  slot :inner_block
+  def inattentive(assigns) do
+    ~H"""
+    <span id={@id} phx-update="ignore"> 
+       <%= render_slot(@inner_block) %>
+    </span>
+    """
+  end
+
+
+  @doc """
+  Wrapper for PhoenixFormAwesomplete.awesomplete_script.
+  """
+  attr :id, :string, required: true 
+  attr :for_field, :any, required: true
+  attr :for_form, :any
+  attr :rest, :global,
+    include: ~w(ajax assign autoFirst combobox convertInput convertResponse data descr descrSearch filter item label list loadall limit maxItems minChars multiple nonce prepop replace sort url urlEnd value),
+    doc: "the options for awesomplete_script."
+  def autocomplete(%{for_field: %Phoenix.HTML.FormField{}} = assigns) do
+    ~H"""
+    <span id={@id} phx-hook="Autocomplete" for_field={@for_field.id} {@rest} ></span>
+    """
+  end
+
+  def autocomplete(assigns) do
+    for_id = Phoenix.HTML.Form.input_id(assigns.for_form, assigns.for_field)
+    assigns = assign(assigns, :for_field, %{id: for_id})
+    ~H"""
+    <span id={@id} phx-hook="Autocomplete" for_field={@for_field.id} {@rest} ></span>
+    """
+  end
+
+  @doc """
+  Wrapper for PhoenixFormAwesomplete.copy_value_to_id.
+  """
+  attr :form, :any, default: nil, doc: "Phoenix.HTML.Form struct or form name."
+  attr :field, :any, required: true, doc: "Phoenix.HTML.FormField struct or field name."
+  attr :dataField, :string, default: nil, doc: "Optional, dataField to be copied, for example: capital"
+  attr :target, :string, doc: "css selector, for example: #capital"
+  attr :rest, :global,
+    include: ~w(id nonce),
+    doc: "script attributes."
+  def copy_value_to_id(%{field: %Phoenix.HTML.FormField{}} = assigns) do
+    ~H"""
+    <%= PhoenixFormAwesomplete.copy_value_to_id_script(@field, @dataField, @target, @rest) %>
+    """
+  end
+
+  def copy_value_to_id(%{form: _form, field: _field} = assigns) do
+    ~H"""
+    <%= PhoenixFormAwesomplete.copy_to_id_script(@form, @field, @dataField, @target, @rest) %>
+    """
+  end
+
+  @doc """
+  Wrapper for PhoenixFormAwesomplete.copy_value_to_field.
+  """
+  attr :field, Phoenix.HTML.FormField, required: true,
+    doc: "a form field struct retrieved from the form, for example: @f[:country]"
+  attr :target, Phoenix.HTML.FormField, required: true,
+    doc: "a form field struct retrieved from the form, for example: @f[:capital]"
+  attr :dataField, :string, default: nil, doc: "Optional, dataField to be copied, for example: capital"
+  attr :rest, :global,
+    include: ~w(id nonce),
+    doc: "script attributes."
+  def copy_value_to_field(%{field: %Phoenix.HTML.FormField{}, target: %Phoenix.HTML.FormField{}} = assigns) do
+    ~H"""
+    <%= PhoenixFormAwesomplete.copy_value_to_field_script(@field, @dataField, @target, @rest) %>
+    """
+  end
+
 end

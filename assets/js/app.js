@@ -72,6 +72,24 @@ Hooks.SortableInputsFor = {
   }
 }
 
+// <span id="list_country-autocomplete" for_field="list_country" loadall="true" maxitems="8" minchars="0" prepop="true" url="https://restcountries.com/v2/all" value="name"></span>
+Hooks.Autocomplete = {
+    mounted() {
+       const node = this.el, a = node.getAttribute.bind(node);
+       if (a('for_field') === undefined) throw new Error("Missing for_field attribute.")
+       let opts = {}, awesomplete_opts = {}, url = a('url'), loadall = a('loadall'),  prepop = a('prepop'), minChars = a('minChars'), maxItems = a('maxItems'), value = a('value')
+       if (url) opts['url'] = url 
+       if (loadall) opts['loadall'] = (loadall === 'true')
+       if (prepop) opts['prepop'] = (prepop === 'true')
+       if (minChars) awesomplete_opts['minChars'] = parseInt(minChars) 
+       if (maxItems) awesomplete_opts['maxItems'] = parseInt(maxItems)
+       if (value)    awesomplete_opts['data'] = function(rec, input) { return rec[value]; } 
+       AwesompleteUtil.start('#' + a('for_field'),
+          opts, 
+          awesomplete_opts
+       );
+    }
+}
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}, hooks: Hooks})
