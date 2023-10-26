@@ -17,7 +17,7 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
       >
         <div class="space-y-4 mb-6">
           <.input field={@form[:title]} type="text" />
-          <.inattentive id={"#{@form[:country].id}-offside"}>
+          <.releaseDOM id={"#{@form[:country].id}-domspace"}>
             <.input field={@form[:country]} type="text" placeholder="Country autocomplete test" />
             <.autocomplete    for_field={@form[:country]}
                               url="https://restcountries.com/v2/all"
@@ -28,7 +28,7 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
                               value="name"
                               id={"#{@form[:country].id}-autocomplete"}
                               />
-          </.inattentive>
+          </.releaseDOM>
           <label class="block cursor-pointer">
             <input type="checkbox" name="list[notifications_order][]" class="hidden" />
             <.icon name="hero-plus-circle" /> prepend

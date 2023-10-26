@@ -656,10 +656,12 @@ defmodule TodoTrekWeb.CoreComponents do
 
   @doc """
   Convenient way to set phx-update="ignore".
+  Transfer ownership of the DOM from Liveview to custom javascript code,
+  after the initial rendering.
   """
   attr :id, :string, required: true 
   slot :inner_block
-  def inattentive(assigns) do
+  def releaseDOM(assigns) do
     ~H"""
     <span id={@id} phx-update="ignore"> 
        <%= render_slot(@inner_block) %>
