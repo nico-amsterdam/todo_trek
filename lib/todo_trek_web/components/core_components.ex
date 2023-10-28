@@ -674,27 +674,27 @@ defmodule TodoTrekWeb.CoreComponents do
   Wrapper for PhoenixFormAwesomplete.awesomplete_script.
   """
   attr :id, :string
-  attr :for_field, :any, required: true
-  attr :for_form, :any
+  attr :forField, :any, required: true
+  attr :forForm, :any
   attr :nonce, :any, doc: "In liveview the nonce will be ignored."
   attr :rest, :global,
     include: ~w(ajax assign autoFirst combobox convertInput convertResponse data descr descrSearch filter item label list loadall limit maxItems minChars multiple prepop replace sort url urlEnd value),
     doc: "the options for awesomplete_script."
-  def autocomplete(%{for_field: %Phoenix.HTML.FormField{}} = assigns) do
-    assigns = assign_new(assigns, :id, fn -> assigns.for_field.id <> "-autocomplete" end)
+  def autocomplete(%{forField: %Phoenix.HTML.FormField{}} = assigns) do
+    assigns = assign_new(assigns, :id, fn -> assigns.forField.id <> "-autocomplete" end)
     ~H"""
-    <span id={@id} phx-hook="Autocomplete" for_field={@for_field.id} {@rest} ></span>
+    <span id={@id} phx-hook="Autocomplete" forField={@forField.id} {@rest} ></span>
     """
   end
 
   def autocomplete(assigns) do
-    for_id = Phoenix.HTML.Form.input_id(assigns.for_form, assigns.for_field)
+    for_id = Phoenix.HTML.Form.input_id(assigns.forForm, assigns.forField)
     assigns = 
       assigns
-      |> assign(:for_field, %{id: for_id})
+      |> assign(:forField, %{id: for_id})
       |> assign_new(:id, fn -> for_id <> "-autocomplete" end)
     ~H"""
-    <span id={@id} phx-hook="Autocomplete" for_field={@for_field.id} {@rest} ></span>
+    <span id={@id} phx-hook="Autocomplete" forField={@forField.id} {@rest} ></span>
     """
   end
 
@@ -722,7 +722,7 @@ defmodule TodoTrekWeb.CoreComponents do
   end
 
   def copy_value_to_id(%{form: _form, field: _field} = assigns) do
-    for_id = Phoenix.HTML.Form.input_id(assigns.for_form, assigns.for_field)
+    for_id = Phoenix.HTML.Form.input_id(assigns.forForm, assigns.forField)
     assigns = 
       assigns
       |> assign(:field, %{id: for_id})

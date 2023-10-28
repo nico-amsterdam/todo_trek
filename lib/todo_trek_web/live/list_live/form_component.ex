@@ -22,7 +22,7 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
 
             <.input field={@form[:capital]} type="text" placeholder="Capital autocomplete test" />
 
-            <.autocomplete    for_field={@form[:country]}
+            <.autocomplete    forField={@form[:country]}
                               url="https://restcountries.com/v2/all"
                               loadall="true"
                               prepop="true"
@@ -31,7 +31,7 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
                               value="name"                          
                               />
 
-            <.autocomplete    for_field={@form[:capital]}
+            <.autocomplete    forField={@form[:capital]}
                               url="https://restcountries.com/v2/all"
                               loadall="true"
                               prepop="true"
