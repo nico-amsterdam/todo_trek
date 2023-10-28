@@ -19,15 +19,54 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
           <.input field={@form[:title]} type="text" />
           <.releaseDOM id={"#{@form[:country].id}-domspace"}>
             <.input field={@form[:country]} type="text" placeholder="Country autocomplete test" />
+
+            <.input field={@form[:capital]} type="text" placeholder="Capital autocomplete test" />
+
             <.autocomplete    for_field={@form[:country]}
                               url="https://restcountries.com/v2/all"
                               loadall="true"
                               prepop="true"
-                              minChars="0" 
+                              minChars="1" 
                               maxItems="8" 
-                              value="name"
-                              id={"#{@form[:country].id}-autocomplete"}
+                              value="name"                          
                               />
+
+            <.autocomplete    for_field={@form[:capital]}
+                              url="https://restcountries.com/v2/all"
+                              loadall="true"
+                              prepop="true"
+                              minChars="1" 
+                              maxItems="8" 
+                              value="capital"
+                              />
+
+             <.copy_value_to_id
+                 field={@form[:country]}
+                 dataField="capital"
+                 target="#awe-capital"
+                 />
+
+             <.copy_value_to_id
+                 field={@form[:capital]}
+                 dataField="capital"
+                 target="#awe-capital"
+                 />
+
+             <.copy_value_to_field
+                 sourceField={@form[:country]}
+                 dataField="capital"
+                 targetField={@form[:capital]}
+                 />
+
+             <.copy_value_to_field
+                 sourceField={@form[:capital]}
+                 dataField="name"
+                 targetField={@form[:country]}
+                 />
+
+              <div id="awe-capital"></div>
+
+
           </.releaseDOM>
           <label class="block cursor-pointer">
             <input type="checkbox" name="list[notifications_order][]" class="hidden" />

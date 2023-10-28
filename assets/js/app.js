@@ -77,19 +77,33 @@ Hooks.Autocomplete = {
     mounted() {
        const node = this.el, a = node.getAttribute.bind(node);
        if (a('for_field') === undefined) throw new Error("Missing for_field attribute.")
-       let opts = {}, awesomplete_opts = {}, url = a('url'), loadall = a('loadall'),  prepop = a('prepop'), minChars = a('minChars'), maxItems = a('maxItems'), value = a('value')
+       let opts = {}, awesomplete_opts = {}
+       const url = a('url'), loadall = a('loadall'),  prepop = a('prepop'), minChars = a('minChars'), maxItems = a('maxItems'), value = a('value')
        if (url) opts['url'] = url 
        if (loadall) opts['loadall'] = (loadall === 'true')
        if (prepop) opts['prepop'] = (prepop === 'true')
        if (minChars) awesomplete_opts['minChars'] = parseInt(minChars) 
        if (maxItems) awesomplete_opts['maxItems'] = parseInt(maxItems)
-       if (value)    awesomplete_opts['data'] = function(rec, input) { return rec[value]; } 
+       if (value)    awesomplete_opts['data'] = function(rec, input) { return rec[value] || ''; } 
        AwesompleteUtil.start('#' + a('for_field'),
           opts, 
           awesomplete_opts
        );
     }
 }
+
+Hooks.AutocompleteCopyValueToId = {
+  mounted() {
+    const node = this.el, a = node.getAttribute.bind(node), dataField = a('dataField'), field = a('field'), targetField = a('targetField')
+    let target = a('target')
+    if (field === undefined) throw new Error("Missing field attribute.")
+    if (target === undefined && targetField === undefined) throw new Error("Missing target or targetField attribute.")
+    if (targetField) target = '#' + targetField
+    AwesompleteUtil.startCopy('#' + field, dataField, target);
+  }
+}
+
+
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}, hooks: Hooks})
