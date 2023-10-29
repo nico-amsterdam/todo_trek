@@ -22,23 +22,7 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
 
             <.input field={@form[:capital]} type="text" placeholder="Capital autocomplete test" />
 
-            <.autocomplete    forField={@form[:country]}
-                              url="https://restcountries.com/v2/all"
-                              loadall="true"
-                              prepop="true"
-                              minChars="1" 
-                              maxItems="8" 
-                              value="name"                          
-                              />
-
-            <.autocomplete    forField={@form[:capital]}
-                              url="https://restcountries.com/v2/all"
-                              loadall="true"
-                              prepop="true"
-                              minChars="1" 
-                              maxItems="8" 
-                              value="capital"
-                              />
+             <div id="awe-capital"></div>
 
              <.copy_value_to_id
                  field={@form[:country]}
@@ -64,7 +48,24 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
                  targetField={@form[:country]}
                  />
 
-              <div id="awe-capital"></div>
+            <.autocomplete    forField={@form[:country]}
+                              url="https://restcountries.com/v2/all"
+                              loadall="true"
+                              prepop="true"
+                              minChars="1" 
+                              maxItems="8" 
+                              value="name"                          
+                              />
+
+            <.autocomplete    forField={@form[:capital]}
+                              url="https://restcountries.com/v2/all"
+                              loadall="true"
+                              prepop="true"
+                              minChars="1" 
+                              maxItems="8" 
+                              value="capital"
+                              />
+
 
 
           </.release_dom>
