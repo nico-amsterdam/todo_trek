@@ -674,8 +674,8 @@ defmodule TodoTrekWeb.CoreComponents do
   Wrapper for PhoenixFormAwesomplete.awesomplete_script.
   """
   attr :id, :string
-  attr :forField, :any, required: true
-  attr :forForm, :any
+  attr :forField, :any, required: true, doc: "Phoenix.HTML.FormField struct or field name."
+  attr :forForm, :any, doc: "Phoenix.HTML.Form struct or form name. Not needed when FormField is used."
   attr :nonce, :any, doc: "In liveview the nonce will be ignored."
   attr :rest, :global,
     include: ~w(ajax assign autoFirst combobox convertInput convertResponse data descr descrSearch filter item label list loadall limit maxItems minChars multiple prepop replace sort url urlEnd value),
@@ -707,11 +707,12 @@ defmodule TodoTrekWeb.CoreComponents do
   """
   attr :id, :string
   attr :field, :any, required: true, doc: "Phoenix.HTML.FormField struct or field name."
+  attr :form, :any, doc: "Phoenix.HTML.Form struct or form name. Not needed when FormField is used."
   attr :target, :any, required: true, doc: "target: css selector, for example: #capital."
   attr :nonce, :any, doc: "In liveview the nonce will be ignored."
   attr :rest, :global,
-    include: ~w(dataField form),
-    doc: "form: Phoenix.HTML.Form struct or form name. dataField: Optional, dataField to be copied, for example: capital."
+    include: ~w(dataField),
+    doc: "dataField: Optional, dataField to be copied, for example: capital."
   def copy_value_to_id(%{field: %Phoenix.HTML.FormField{}} = assigns) do
     assigns =
       assigns
@@ -722,7 +723,7 @@ defmodule TodoTrekWeb.CoreComponents do
   end
 
   def copy_value_to_id(%{form: _form, field: _field} = assigns) do
-    for_id = Phoenix.HTML.Form.input_id(assigns.forForm, assigns.forField)
+    for_id = Phoenix.HTML.Form.input_id(assigns.form, assigns.field)
     assigns = 
       assigns
       |> assign(:field, %{id: for_id})
@@ -738,8 +739,9 @@ defmodule TodoTrekWeb.CoreComponents do
   attr :id, :string
   attr :sourceField, :any, required: true, doc: "Phoenix.HTML.FormField struct."
   attr :targetField, :any, required: true, doc: "Phoenix.HTML.FormField struct."
+  attr :nonce, :any, doc: "In liveview the nonce will be ignored."
   attr :rest, :global,
-    include: ~w(dataField nonce),
+    include: ~w(dataField),
     doc: "dataField: Optional, dataField to be copied, for example: capital."
   def copy_value_to_field(%{sourceField: %Phoenix.HTML.FormField{}, targetField: %Phoenix.HTML.FormField{}} = assigns) do
     assigns =
