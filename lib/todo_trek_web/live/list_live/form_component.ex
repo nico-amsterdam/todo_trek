@@ -17,7 +17,7 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
       >
         <div class="space-y-4 mb-6">
           <.input field={@form[:title]} type="text" />
-          <.releaseDOM id={"#{@form[:country].id}-domspace"}>
+          <.release_dom id={"#{@form[:country].id}-domspace"}>
             <.input field={@form[:country]} type="text" placeholder="Country autocomplete test" />
 
             <.input field={@form[:capital]} type="text" placeholder="Capital autocomplete test" />
@@ -67,7 +67,7 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
               <div id="awe-capital"></div>
 
 
-          </.releaseDOM>
+          </.release_dom>
           <label class="block cursor-pointer">
             <input type="checkbox" name="list[notifications_order][]" class="hidden" />
             <.icon name="hero-plus-circle" /> prepend
