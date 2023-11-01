@@ -1,31 +1,14 @@
 defmodule TodoTrekWeb.AwesompleteComponents do
+
   @moduledoc """
   Provides function components for the Awesomplete component,
   which provides autocomplete functionality.
   """
+
   use Phoenix.Component
 
-  # alias Phoenix.LiveView.JS
-  # import HelloWorldWeb.Gettext
-
   @doc """
-  Convenient way to set phx-update="ignore".
-  Transfer ownership of the DOM from Liveview to custom javascript code,
-  after the initial rendering.
-  """
-  attr :id, :string, required: true 
-  slot :inner_block
-  def release_dom(assigns) do
-    ~H"""
-    <span id={@id} phx-update="ignore"> 
-       <%= render_slot(@inner_block) %>
-    </span>
-    """
-  end
-
-
-  @doc """
-  Wrapper for PhoenixFormAwesomplete.awesomplete_script.
+  Provide functionality like PhoenixFormAwesomplete.awesomplete_script via client hook.
   """
   attr :id, :string
   attr :forField, :any, required: true, doc: "Phoenix.HTML.FormField struct or field name."
@@ -57,7 +40,7 @@ defmodule TodoTrekWeb.AwesompleteComponents do
   end
 
   @doc """
-  Wrapper for PhoenixFormAwesomplete.copy_value_to_id.
+  Provide functionality like PhoenixFormAwesomplete.copy_value_to_id via client hook.
   """
   attr :id, :string
   attr :field, :any, required: true, doc: "Phoenix.HTML.FormField struct or field name."
@@ -88,7 +71,7 @@ defmodule TodoTrekWeb.AwesompleteComponents do
   end
 
   @doc """
-  Wrapper for PhoenixFormAwesomplete.copy_value_to_field.
+  Provide functionality like PhoenixFormAwesomplete.copy_value_to_field via client hook.
   """
   attr :id, :string
   attr :sourceField, :any, required: true, doc: "Phoenix.HTML.FormField struct."
@@ -103,6 +86,19 @@ defmodule TodoTrekWeb.AwesompleteComponents do
       |> assign_new(:id, fn -> "awe-" <> assigns.sourceField.id <> "-2fld-" <> assigns.targetField.id end)
     ~H"""
     <span id={@id} phx-hook="AutocompleteCopyValueToId" field={@sourceField.id} targetField={@targetField.id} {@rest} ></span>
+    """
+  end
+
+  @doc """
+  Transfer ownership of the DOM from LiveView to custom javascript code after the initial rendering.
+  Another way to set phx-update="ignore" without scattering this phx attribute in the templates.
+  """
+  attr :id, :string, required: true 
+  attr :rest, :global
+  slot :inner_block
+  def release_dom(assigns) do
+    ~H"""
+    <span id={@id} phx-update="ignore" {@rest} ><%= render_slot(@inner_block) %></span>
     """
   end
 
