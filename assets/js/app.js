@@ -22,6 +22,8 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 import Sortable from "../vendor/sortable"
+import Awesomplete from '../vendor/awesomplete-v2020.min.js'
+import AwesompleteUtil from '../vendor/awesomplete-util.min.js'
 
 let Hooks = {}
 
@@ -79,14 +81,14 @@ Hooks.Autocomplete = {
        if (a('forField') === undefined) throw new Error("Missing forField attribute.")
        let opts = {}, awesompleteOpts = {}
        const url = a('url'), loadall = a('loadall'),  prepop = a('prepop'), minChars = a('minChars'), maxItems = a('maxItems'), value = a('value')
-       if (url) opts['url'] = url 
+       if (url) opts['url'] = url
        if (loadall) opts['loadall'] = (loadall === 'true')
        if (prepop) opts['prepop'] = (prepop === 'true')
-       if (minChars) awesompleteOpts['minChars'] = parseInt(minChars) 
+       if (minChars) awesompleteOpts['minChars'] = parseInt(minChars)
        if (maxItems) awesompleteOpts['maxItems'] = parseInt(maxItems)
-       if (value)    awesompleteOpts['data'] = function(rec, input) { return rec[value] || ''; } 
+       if (value)    awesompleteOpts['data'] = function(rec, input) { return rec[value] || ''; }
        AwesompleteUtil.start('#' + a('forField'),
-          opts, 
+          opts,
           awesompleteOpts
        );
     }

@@ -10,9 +10,8 @@ defmodule TodoTrekWeb.Router do
 
   @content_security_policy "default-src 'self';" <>
      "connect-src ws://#{@host}:* https://restcountries.com/v2/all;" <>
-     "style-src  'self' 'unsafe-inline' http://nico-amsterdam.github.io/awesomplete-util/css/awesomplete.css;" <>
-     "script-src 'self' http://nico-amsterdam.github.io/awesomplete-util/js/awesomplete-v2020.min.js" <>
-                      " http://nico-amsterdam.github.io/awesomplete-util/js/awesomplete-util.min.js;" <>
+     "style-src  'self' 'unsafe-inline';" <> 
+     "script-src 'self';" <>
      "img-src    'self' blob: data:;" <>
      "font-src                data:;"
 
