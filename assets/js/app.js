@@ -84,8 +84,8 @@ Hooks.Autocomplete = {
        if (url) opts['url'] = url
        if (loadall) opts['loadall'] = (loadall === 'true')
        if (prepop) opts['prepop'] = (prepop === 'true')
-       if (minChars) awesompleteOpts['minChars'] = parseInt(minChars)
-       if (maxItems) awesompleteOpts['maxItems'] = parseInt(maxItems)
+       if (minChars) awesompleteOpts['minChars'] = Number(minChars)
+       if (maxItems) awesompleteOpts['maxItems'] = Number(maxItems)
        if (value)    awesompleteOpts['data'] = function(rec, input) { return rec[value] || ''; }
        AwesompleteUtil.start('#' + a('forField'),
           opts,
