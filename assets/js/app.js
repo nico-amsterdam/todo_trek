@@ -77,20 +77,23 @@ Hooks.SortableInputsFor = {
 // <span id="list_country-autocomplete" forField="list_country" loadall="true" maxitems="8" minchars="0" prepop="true" url="https://restcountries.com/v2/all" value="name"></span>
 Hooks.Autocomplete = {
     mounted() {
-       const node = this.el, a = node.getAttribute.bind(node);
-       if (a('forField') === undefined) throw new Error("Missing forField attribute.")
+       const node = this.el, a = node.getAttribute.bind(node), fieldID = a('forField');
+       if (fieldID === undefined) throw new Error("Missing forField attribute.")
+       const url = a('url'), loadall = a('loadall'), prepop = a('prepop'), minChars = a('minChars')
+                 , maxItems = a('maxItems'), value = a('value'), combobox = a('combobox')
+                 , comboSelectID = '#' + (combobox !== 'true' ? combobox : 'awe_btn_' + fieldID)
        let opts = {}, awesompleteOpts = {}
-       const url = a('url'), loadall = a('loadall'),  prepop = a('prepop'), minChars = a('minChars'), maxItems = a('maxItems'), value = a('value')
        if (url) opts['url'] = url
        if (loadall) opts['loadall'] = (loadall === 'true')
        if (prepop) opts['prepop'] = (prepop === 'true')
        if (minChars) awesompleteOpts['minChars'] = Number(minChars)
        if (maxItems) awesompleteOpts['maxItems'] = Number(maxItems)
        if (value)    awesompleteOpts['data'] = function(rec, input) { return rec[value] || ''; }
-       AwesompleteUtil.start('#' + a('forField'),
+       let awe = AwesompleteUtil.start('#' + fieldID,
           opts,
           awesompleteOpts
-       );
+       )
+       if (combobox && combobox !== 'false') AwesompleteUtil.startClick(comboSelectID, awe)
     }
 }
 
