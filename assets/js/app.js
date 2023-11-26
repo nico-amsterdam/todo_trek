@@ -81,13 +81,15 @@ Hooks.Autocomplete = {
        if (fieldID === undefined) throw new Error("Missing forField attribute.")
        const url = a('url'), loadall = a('loadall'), prepop = a('prepop'), minChars = a('minChars')
                  , maxItems = a('maxItems'), value = a('value'), combobox = a('combobox')
+                 , debounce = a('debounce')
                  , comboSelectID = '#' + (combobox !== 'true' ? combobox : 'awe_btn_' + fieldID)
        let opts = {}, awesompleteOpts = {}
-       if (url) opts['url'] = url
+       if (url)     opts['url']     = url
        if (loadall) opts['loadall'] = (loadall === 'true')
-       if (prepop) opts['prepop'] = (prepop === 'true')
+       if (prepop)  opts['prepop']  = (prepop === 'true')
        if (minChars) awesompleteOpts['minChars'] = Number(minChars)
        if (maxItems) awesompleteOpts['maxItems'] = Number(maxItems)
+       if (debounce) awesompleteOpts['debounce'] = Number(debounce)
        if (value)    awesompleteOpts['data'] = function(rec, input) { return rec[value] || ''; }
        let awe = AwesompleteUtil.start('#' + fieldID,
           opts,
