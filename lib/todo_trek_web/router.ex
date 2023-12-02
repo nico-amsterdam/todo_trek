@@ -29,6 +29,15 @@ defmodule TodoTrekWeb.Router do
     plug :accepts, ["json"]
   end
 
+  defp max_age(conn, max_age) when is_integer(max_age) do
+    Plug.Conn.put_resp_header(conn, "cache-control", "max-age=" <> to_string(max_age))
+  end
+
+  pipeline :api_cached do
+    plug :accepts, ["json"]
+    plug :max_age, 60 * 60 * 12
+  end
+
   scope "/", TodoTrekWeb do
     pipe_through :browser
 
@@ -38,6 +47,16 @@ defmodule TodoTrekWeb.Router do
       live "/lists/new", HomeLive, :new_list
       live "/lists/:id/edit", HomeLive, :edit_list
     end
+  end
+
+  #
+  # JSON API's
+  #
+  scope "/rest/public", TodoTrekWeb do
+    pipe_through :api_cached
+
+    # get "/v1/productcat", JsonProductCategoryController, :index
+    resources "/v1/productcat", JsonProductCategoryController, only: [:index]
   end
 
   # Other scopes may use custom stacks.
