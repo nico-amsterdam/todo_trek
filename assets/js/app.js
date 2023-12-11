@@ -83,10 +83,31 @@ Hooks.Autocomplete = {
       , maxItems = a('maxItems'), value = a('value'), combobox = a('combobox')
       , comboSelectID = '#' + (combobox !== 'true' ? combobox : 'awe_btn_' + fieldID)
       , descr = a('descr'), descrSearch = a('descrSearch'), label = a('label')
+      , filter = a('filter'), debounce = a('debounce')
       let opts = {}, awesompleteOpts = {}
       if (url) opts['url'] = url
       if (loadall) opts['loadall'] = (loadall === 'true')
       if (prepop) opts['prepop'] = (prepop === 'true')
+      if (debounce) opts['debounce'] = Number(debounce)
+      switch(filter) {
+        case null:
+        case "":
+          break;
+        case "Awesomplete.FILTER_STARTSWITH":
+          awesompleteOpts['filter'] = Awesomplete.FILTER_STARTSWITH;
+          break;
+        case "Awesomplete.FILTER_CONTAINS":
+          awesompleteOpts['filter'] = Awesomplete.FILTER_CONTAINS;
+          break;
+        case "AwesompleteUtil.filterStartsWith":
+          awesompleteOpts['filter'] = AwesompleteUtil.filterStartsWith;
+          break;
+        case "AwesompleteUtil.filterContains":
+          awesompleteOpts['filter'] = AwesompleteUtil.filterContains;
+          break;
+        default:
+          throw new Error('Unknown filter')
+      }
       if (minChars) awesompleteOpts['minChars'] = Number(minChars)
       if (maxItems) awesompleteOpts['maxItems'] = Number(maxItems)
       if (value && descr && descrSearch == 'true') {
