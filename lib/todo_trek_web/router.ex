@@ -36,6 +36,7 @@ defmodule TodoTrekWeb.Router do
   pipeline :api_cached do
     plug :accepts, ["json"]
     plug :max_age, 60 * 60 * 12
+    # plug :origin, "*"
   end
 
   scope "/", TodoTrekWeb do
@@ -57,6 +58,7 @@ defmodule TodoTrekWeb.Router do
 
     # get "/v1/productcat", JsonProductCategoryController, :index
     resources "/v1/productcat", JsonProductCategoryController, only: [:index]
+    # options   "/v1/productcat", JsonProductCategoryController, :options
   end
 
   # Other scopes may use custom stacks.

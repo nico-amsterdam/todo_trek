@@ -22,8 +22,7 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 import Sortable from "../vendor/sortable"
-import Awesomplete from '../vendor/awesomplete-v2020.min.js'
-import AwesompleteUtil from '../vendor/awesomplete-util.min.js'
+import { attachAwesomplete } from "phoenix_form_awesomplete"
 
 let Hooks = {}
 
@@ -74,80 +73,23 @@ Hooks.SortableInputsFor = {
   }
 }
 
-// <span id="list_country-autocomplete" forField="list_country" loadall="true" maxitems="8" minchars="0" prepop="true" url="https://restcountries.com/v2/all" value="name"></span>
+let Flters = {}
+
+Flters.starts_with = Awesomplete.FILTER_STARTSWITH;
+Flters.contains = Awesomplete.FILTER_CONTAINS;
+
+// these custom functions can be referenced in autocomplete function components 
+let customAwesompleteBindings = {
+    filters: Flters,
+    list2 : ['Ruby', 'Python'],
+    list3: [{ label: '<b>blackie</b>',  value: 'black' },{ label: 'bluei',     value: 'blue'  }]
+};
+
 Hooks.Autocomplete = {
-    mounted() {
-      const node = this.el, a = node.getAttribute.bind(node), fieldID = a('forField');
-      if (fieldID === undefined) throw new Error("Missing forField attribute.")
-      const url = a('url'), loadall = a('loadall'), prepop = a('prepop'), minChars = a('minChars')
-      , maxItems = a('maxItems'), value = a('value'), combobox = a('combobox')
-      , comboSelectID = '#' + (combobox !== 'true' ? combobox : 'awe_btn_' + fieldID)
-      , descr = a('descr'), descrSearch = a('descrSearch'), label = a('label')
-      , filter = a('filter'), debounce = a('debounce')
-      let opts = {}, awesompleteOpts = {}
-      if (url) opts['url'] = url
-      if (loadall) opts['loadall'] = (loadall === 'true')
-      if (prepop) opts['prepop'] = (prepop === 'true')
-      if (debounce) opts['debounce'] = Number(debounce)
-      switch(filter) {
-        case null:
-        case "":
-          break;
-        case "Awesomplete.FILTER_STARTSWITH":
-          awesompleteOpts['filter'] = Awesomplete.FILTER_STARTSWITH;
-          break;
-        case "Awesomplete.FILTER_CONTAINS":
-          awesompleteOpts['filter'] = Awesomplete.FILTER_CONTAINS;
-          break;
-        case "AwesompleteUtil.filterStartsWith":
-          awesompleteOpts['filter'] = AwesompleteUtil.filterStartsWith;
-          break;
-        case "AwesompleteUtil.filterContains":
-          awesompleteOpts['filter'] = AwesompleteUtil.filterContains;
-          break;
-        default:
-          throw new Error('Unknown filter')
-      }
-      if (minChars) awesompleteOpts['minChars'] = Number(minChars)
-      if (maxItems) awesompleteOpts['maxItems'] = Number(maxItems)
-      if (value && descr && descrSearch == 'true') {
-        awesompleteOpts['data'] = 
-          function(rec, input) { 
-            return { 
-              label: rec[label || value]+'<p>'+(rec[descr] || ''),
-              value: rec[value]+'|'+(rec[descr] || '').replace('|', ' ') 
-            }; 
-          }
-        awesompleteOpts['replace'] = 
-          function(data) { 
-            this.input.value = data.value.substring(0, data.value.lastIndexOf('|'));
-          }
-      } else if (value && descr) {
-        awesompleteOpts['data'] = 
-          function(rec, input) { 
-            return { 
-              label: rec[label || value]+'<p>'+(rec[descr] || ''),
-              value: rec[value] 
-            }; 
-          }
-      } else if (value && label) {
-        awesompleteOpts['data'] = 
-          function(rec, input) { 
-            return {
-              label: rec[label] || '',
-              value: rec[value] || ''
-            }; 
-          }
-      } else if (value) {
-        awesompleteOpts['data'] = function(rec, input) { return rec[value] || ''; }
-      }
-      let awe = AwesompleteUtil.start('#' + fieldID,
-        opts,
-        awesompleteOpts
-      )
-      if (combobox && combobox !== 'false') AwesompleteUtil.startClick(comboSelectID, awe)
-    }
+  mounted() { attachAwesomplete(this.el, customAwesompleteBindings) }
 }
+
+// <span id="list_country-autocomplete" forField="list_country" loadall="true" maxitems="8" minchars="0" prepop="true" url="https://restcountries.com/v2/all" value="name"></span>
 
 Hooks.AutocompleteCopyValueToId = {
   mounted() {

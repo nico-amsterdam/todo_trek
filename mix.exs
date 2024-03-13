@@ -54,7 +54,9 @@ defmodule TodoTrek.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       {:credo,  "~> 1.7" , only: :dev},
-      {:nimble_csv, "~> 1.2"}
+      {:nimble_csv, "~> 1.2"},
+      {:cors_plug, "~> 3.0"},
+      {:phoenix_form_awesomplete, git: "https://github.com/nico-amsterdam/phoenix_form_awesomplete.git", branch: "v1-heex"}
     ]
   end
 

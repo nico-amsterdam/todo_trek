@@ -53,6 +53,7 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
                               url="https://restcountries.com/v2/all"
                               loadall="true"
                               prepop="true"
+                              filter="filters.contains"
                               minChars="1" 
                               maxItems="8" 
                               value="name"                          
@@ -67,6 +68,13 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
                               value="capital"
                               />
 
+            <.input field={@form[:color]} type="text" placeholder="Color autocomplete test" autocomplete="off" />
+
+            <.autocomplete    forField={@form[:color]}
+            minChars="1"
+    filter="AwesompleteUtil.filterContains",
+    list="list3"   
+            />
 
 
           </.release_dom>
