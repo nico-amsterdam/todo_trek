@@ -53,7 +53,7 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
                               url="https://restcountries.com/v2/all"
                               loadall="true"
                               prepop="true"
-                              filter="filters.contains"
+                              filter="filterContains"
                               minChars="1" 
                               maxItems="8" 
                               value="name"                          

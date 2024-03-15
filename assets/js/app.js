@@ -78,7 +78,7 @@ let Flters = {}
 Flters.starts_with = Awesomplete.FILTER_STARTSWITH;
 Flters.contains = Awesomplete.FILTER_CONTAINS;
 
-// these custom functions can be referenced in autocomplete function components 
+// these custom functions can be referenced in autocomplete function components
 let customAwesompleteBindings = {
     filters: Flters,
     list2 : ['Ruby', 'Python'],
