@@ -56,7 +56,12 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
                               filter="filterContains"
                               minChars="1" 
                               maxItems="8" 
-                              value="name"                          
+                              value="name"     
+                              descr="capital"
+                              descrSearch="true"
+                              class="hidden"
+                              multiple="true"  
+                              replace="onSelectUpper"                   
                               />
 
             <.autocomplete    forField={@form[:capital]}
@@ -65,6 +70,7 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
                               prepop="true"
                               minChars="1" 
                               maxItems="8" 
+                              class="hidden"
                               value="capital"
                               />
 
@@ -72,7 +78,7 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
 
             <.autocomplete    forField={@form[:color]}
             minChars="1"
-    filter="AwesompleteUtil.filterContains",
+    filter="filterContains",
     list="list3"   
             />
 

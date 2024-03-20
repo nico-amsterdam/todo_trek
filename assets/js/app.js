@@ -73,20 +73,31 @@ Hooks.SortableInputsFor = {
   }
 }
 
-let Flters = {}
+function replaceWithUpper(replaceText) {
+  this.input.value = replaceText?.toUpperCase();
+}
 
-Flters.starts_with = Awesomplete.FILTER_STARTSWITH;
-Flters.contains = Awesomplete.FILTER_CONTAINS;
+// these functions and objects can be referenced by name in the autocomplete function components
+const AU = AwesompleteUtil, customAwesompleteContext = {
+  filterContains:   AU.filterContains
+, filterStartsWith: AU.filterStartsWith
+, filterWords:      AU.filterWords
+, filterOff:        AU.filterOff
 
-// these custom functions can be referenced in autocomplete function components
-let customAwesompleteBindings = {
-    filters: Flters,
-    list2 : ['Ruby', 'Python'],
-    list3: [{ label: '<b>blackie</b>',  value: 'black' },{ label: 'bluei',     value: 'blue'  }]
-};
+, item:             AU.item
+, itemContains:     AU.itemContains
+, itemStartsWith:   AU.itemStartsWith
+, itemMarkAll:      AU.itemMarkAll
+, itemWords:        AU.itemWords
+
+, onSelectUpper:    replaceWithUpper
+
+, list2: ['Ruby', 'Python']
+, list3: [{ label: '<b>blackie</b>',  value: 'black' },{ label: 'bluei',     value: 'blue'  }]
+}
 
 Hooks.Autocomplete = {
-  mounted() { attachAwesomplete(this.el, customAwesompleteBindings) }
+  mounted() { attachAwesomplete(this.el, {}, customAwesompleteContext) }
 }
 
 // <span id="list_country-autocomplete" forField="list_country" loadall="true" maxitems="8" minchars="0" prepop="true" url="https://restcountries.com/v2/all" value="name"></span>
