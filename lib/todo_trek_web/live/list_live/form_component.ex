@@ -72,14 +72,17 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
 
             <.input field={@form[:color]} type="text" placeholder="Color autocomplete test" />
 
-            <.autocomplete    forField={@form[:color]}
+            <.autocomplete 
+              forField={@form[:color]}
               minChars="1"
+              filter="filterContains"
               list="listWithLabels"   
             />
 
             <.input field={@form[:alphabet]} type="text" placeholder="Make a sentence with all letters of the alphabet" />
 
-            <.autocomplete forField={@form[:alphabet]}
+            <.autocomplete
+              forField={@form[:alphabet]}
               minChars="1"
               multiple=" ,"
               list="The,quick,brown,fox,jumps,over,the,lazy,dog,Pack,my,box,with,five,dozen,liquor,jugs"   
@@ -116,7 +119,8 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
               <option>Yasmine</option>
               <option>Zara</option>
             </datalist>
-            <.autocomplete forField={@form[:textwithreferences]}
+            <.autocomplete
+              forField={@form[:textwithreferences]}
               minChars="1"
               multiple="@"
               replace="replaceAtSign"

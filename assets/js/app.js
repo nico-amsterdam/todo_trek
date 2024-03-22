@@ -120,8 +120,6 @@ Hooks.Autocomplete = {
    mounted() { attachAwesomplete(this.el, customAwesompleteContext, {}) }
 }
 
-// <span id="list_country-autocomplete" forField="list_country" loadall="true" maxitems="8" minchars="0" prepop="true" url="https://restcountries.com/v2/all" value="name"></span>
-
 Hooks.AutocompleteCopyValueToId = {
   mounted() { copyValueToId(this.el) }
 }
