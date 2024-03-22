@@ -22,7 +22,7 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 import Sortable from "../vendor/sortable"
-import { attachAwesomplete, copyValueToId } from "phoenix_form_awesomplete"
+import { AwesompleteUtil, attachAwesomplete, copyValueToId } from "phoenix_form_awesomplete"
 
 let Hooks = {}
 
@@ -83,7 +83,7 @@ replaceRemoveLastSeparator = function(replaceText) { // cannot use arrow functio
 // compare only the first word after the last @ sign of the input with the suggestions
 convertInputFirstWordAfterAtSign = function(inputText) { // cannot use arrow function, because access to 'this' is needed.
   // do not compare if there is no @ in the input
-  if (!this.input.value.includes('@')) return '';  
+  if (!this.input.value.includes('@')) return '';
   // search till the first space
   if (inputText.includes(' ')) inputText = inputText.substring(0, inputText.indexOf(' '))
   return AwesompleteUtil.convertInput(inputText);
@@ -95,18 +95,23 @@ filterAfterAtSign = function(data, input) { // cannot use arrow function, becaus
   return AwesompleteUtil.filterContains(data, input);
 }
 
-// these functions and objects can be referenced by name in the autocomplete function components
-const AU = AwesompleteUtil, customAwesompleteContext = {
-  filterContains:   AU.filterContains  // the default, so it's not really needed here
+const AU = AwesompleteUtil
+, customAwesompleteContext = {
+  // These functions and objects can be referenced by name in the autocomplete function components.
+  // This list can be customized.
+
+  filterContains:   AU.filterContains // default
 , filterStartsWith: AU.filterStartsWith
 , filterWords:      AU.filterWords
 , filterOff:        AU.filterOff
 
-, item:             AU.item
-, itemContains:     AU.itemContains
+, item:             AU.item          // does NOT mark matching text
+// , itemContains:     AU.itemContains  // this is the default, no need to specify it.
 , itemStartsWith:   AU.itemStartsWith
-, itemMarkAll:      AU.itemMarkAll
-, itemWords:        AU.itemWords
+, itemMarkAll:      AU.itemMarkAll   // also mark matching text inside the description
+, itemWords:        AU.itemWords     // mark matching words
+
+// add your custom functions and/or lists here
 
 , replaceAtSign:      replaceRemoveLastSeparator
 , convertInputAtSign: convertInputFirstWordAfterAtSign
@@ -117,7 +122,7 @@ const AU = AwesompleteUtil, customAwesompleteContext = {
 }
 
 Hooks.Autocomplete = {
-   mounted() { attachAwesomplete(this.el, customAwesompleteContext, {}) }
+   mounted() { attachAwesomplete(this.el, customAwesompleteContext, {} /* defaultSettings */ ) }
 }
 
 Hooks.AutocompleteCopyValueToId = {
