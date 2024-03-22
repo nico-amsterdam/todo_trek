@@ -22,7 +22,7 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 import Sortable from "../vendor/sortable"
-import { attachAwesomplete } from "phoenix_form_awesomplete"
+import { attachAwesomplete, copyValueToId } from "phoenix_form_awesomplete"
 
 let Hooks = {}
 
@@ -73,13 +73,31 @@ Hooks.SortableInputsFor = {
   }
 }
 
-function replaceWithUpper(replaceText) {
-  this.input.value = replaceText?.toUpperCase();
+// Do not add separator after selection in a multi select.
+replaceRemoveLastSeparator = function(replaceText) { // cannot use arrow function, because access to 'this' is needed.
+  // if multiple="@" then @ + space was added. Here the @ is removed.
+  if (replaceText) replaceText = replaceText.substring(0, replaceText.length - 2) + ' ';
+  this.input.value = replaceText;
+}
+
+// compare only the first word after the last @ sign of the input with the suggestions
+convertInputFirstWordAfterAtSign = function(inputText) { // cannot use arrow function, because access to 'this' is needed.
+  // do not compare if there is no @ in the input
+  if (!this.input.value.includes('@')) return '';  
+  // search till the first space
+  if (inputText.includes(' ')) inputText = inputText.substring(0, inputText.indexOf(' '))
+  return AwesompleteUtil.convertInput(inputText);
+}
+
+// don't show suggestions when there is no @ sign entered yet.
+filterAfterAtSign = function(data, input) { // cannot use arrow function, because access to 'this' is needed.
+  if (!this.input.value.includes('@')) return false;
+  return AwesompleteUtil.filterContains(data, input);
 }
 
 // these functions and objects can be referenced by name in the autocomplete function components
 const AU = AwesompleteUtil, customAwesompleteContext = {
-  filterContains:   AU.filterContains
+  filterContains:   AU.filterContains  // the default, so it's not really needed here
 , filterStartsWith: AU.filterStartsWith
 , filterWords:      AU.filterWords
 , filterOff:        AU.filterOff
@@ -90,30 +108,23 @@ const AU = AwesompleteUtil, customAwesompleteContext = {
 , itemMarkAll:      AU.itemMarkAll
 , itemWords:        AU.itemWords
 
-, onSelectUpper:    replaceWithUpper
+, replaceAtSign:      replaceRemoveLastSeparator
+, convertInputAtSign: convertInputFirstWordAfterAtSign
+, filterAtSign:       filterAfterAtSign
 
-, list2: ['Ruby', 'Python']
-, list3: [{ label: '<b>blackie</b>',  value: 'black' },{ label: 'bluei',     value: 'blue'  }]
+, listWithoutLabels: ['Ruby', 'Python']
+, listWithLabels: [{ label: '<b>black</b>',  value: 'black' },{ label: '<i>red</i>', value: 'red' },{ label: 'blueish', value: 'blue' }]
 }
 
 Hooks.Autocomplete = {
-  mounted() { attachAwesomplete(this.el, {}, customAwesompleteContext) }
+   mounted() { attachAwesomplete(this.el, customAwesompleteContext, {}) }
 }
 
 // <span id="list_country-autocomplete" forField="list_country" loadall="true" maxitems="8" minchars="0" prepop="true" url="https://restcountries.com/v2/all" value="name"></span>
 
 Hooks.AutocompleteCopyValueToId = {
-  mounted() {
-    const node = this.el, a = node.getAttribute.bind(node), dataField = a('dataField'), field = a('field'), targetField = a('targetField')
-    let target = a('target')
-    if (field === undefined) throw new Error("Missing field attribute.")
-    if (target === undefined && targetField === undefined) throw new Error("Missing target or targetField attribute.")
-    if (targetField) target = '#' + targetField
-    AwesompleteUtil.startCopy('#' + field, dataField, target);
-  }
+  mounted() { copyValueToId(this.el) }
 }
-
-
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}, hooks: Hooks})

@@ -1,16 +1,6 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
-@import "awesomplete.css";
+@import "../../deps/phoenix_form_awesomplete/priv/static/awesomplete.css";
 
 /* This file is for your main application CSS */
-
-/*
- * Awesomplete
- */
-div.awesomplete {display: block}
-div.awesomplete ul li p {display: block; font-size: small; margin-left: 1em}
-div.awesomplete .awe-found {border: 2px solid green}
-.hide-not-found div.awesomplete .awe-not-found {border-color: lightblue}
-div.awesomplete .awe-not-found {border: 2px solid red}
-.awe-btn .caron { pointer-events: none }

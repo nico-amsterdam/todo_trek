@@ -19,11 +19,12 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
           <.input field={@form[:title]} type="text" />
           <.release_dom id={"#{@form[:country].id}-domspace"} >
 
-            <.input field={@form[:country]} type="text" placeholder="Country autocomplete test" autocomplete="off" />
+            <.input field={@form[:country]} type="text" placeholder="Country autocomplete test" />
 
-            <.input field={@form[:capital]} type="text" placeholder="Capital autocomplete test" autocomplete="off" />
+            <.input field={@form[:capital]} type="text" placeholder="Capital autocomplete test" />
 
-             <div id="awe-capital"></div>
+            <div id="awe-capital"></div>
+
 
              <.copy_value_to_id
                  field={@form[:country]}
@@ -53,15 +54,11 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
                               url="https://restcountries.com/v2/all"
                               loadall="true"
                               prepop="true"
-                              filter="filterContains"
                               minChars="1" 
                               maxItems="8" 
                               value="name"     
                               descr="capital"
                               descrSearch="true"
-                              class="hidden"
-                              multiple="true"  
-                              replace="onSelectUpper"                   
                               />
 
             <.autocomplete    forField={@form[:capital]}
@@ -70,18 +67,63 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
                               prepop="true"
                               minChars="1" 
                               maxItems="8" 
-                              class="hidden"
                               value="capital"
                               />
 
-            <.input field={@form[:color]} type="text" placeholder="Color autocomplete test" autocomplete="off" />
+            <.input field={@form[:color]} type="text" placeholder="Color autocomplete test" />
 
             <.autocomplete    forField={@form[:color]}
-            minChars="1"
-    filter="filterContains",
-    list="list3"   
+              minChars="1"
+              list="listWithLabels"   
             />
 
+            <.input field={@form[:alphabet]} type="text" placeholder="Make a sentence with all letters of the alphabet" />
+
+            <.autocomplete forField={@form[:alphabet]}
+              minChars="1"
+              multiple=" ,"
+              list="The,quick,brown,fox,jumps,over,the,lazy,dog,Pack,my,box,with,five,dozen,liquor,jugs"   
+            />
+
+
+            <.input field={@form[:textwithreferences]} type="textarea" placeholder="Write a text and use @ to reference people" />
+
+            <datalist id="peoplelist">
+              <option>Ada</option>
+              <option>Beyonce</option>
+              <option>Chris</option>
+              <option>Danny</option>
+              <option>Edward</option>
+              <option>Frank</option>
+              <option>Gerard</option>
+              <option>Hanna</option>
+              <option>Iris</option>
+              <option>John</option>
+              <option>Kate</option>
+              <option>Leo</option>
+              <option>Max</option>
+              <option>Neo</option>
+              <option>Olivia</option>
+              <option>Penny</option>
+              <option>Quincey</option>
+              <option>Ryan</option>
+              <option>Sarah</option>
+              <option>Tara</option>
+              <option>Umar</option>
+              <option>Veronica</option>
+              <option>Wendy</option>
+              <option>Xena</option>
+              <option>Yasmine</option>
+              <option>Zara</option>
+            </datalist>
+            <.autocomplete forField={@form[:textwithreferences]}
+              minChars="1"
+              multiple="@"
+              replace="replaceAtSign"
+              filter="filterAtSign"
+              convertInput="convertInputAtSign"
+              list="#peoplelist"   
+            />
 
           </.release_dom>
           <label class="block cursor-pointer">
@@ -101,7 +143,9 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
                 <label>
                   <input
                     type="checkbox"
-                    name="list[notifications_delete][]"
+                    name="list[
+                      \
+                    ][]"
                     value={f_nested.index}
                     class="hidden"
                   />
