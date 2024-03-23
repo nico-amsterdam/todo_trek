@@ -15,12 +15,12 @@ defmodule TodoTrekWeb.AwesompleteComponents do
   attr :forForm, :any, doc: "Phoenix.HTML.Form struct or form name. Not needed when FormField is used."
   attr :nonce, :any, doc: "In liveview the nonce will be ignored."
   attr :rest, :global,
-    include: ~w(ajax assign autoFirst combobox convertInput convertResponse data debounce descr descrSearch filter item label list loadall limit maxItems minChars multiple prepop replace sort url urlEnd value),
+    include: ~w(ajax assign autoFirst combobox container convertInput convertResponse data debounce descr descrSearch filter item label list listLabel loadall limit maxItems minChars multiple prepop replace sort url urlEnd value),
     doc: "the options for awesomplete_script."
   def autocomplete(%{forField: %Phoenix.HTML.FormField{}} = assigns) do
     assigns = assign_new(assigns, :id, fn -> assigns.forField.id <> "-autocomplete" end)
     ~H"""
-    <span id={@id} phx-hook="Autocomplete" forField={@forField.id} {@rest} ></span>
+    <span id={@id} phx-hook="Autocomplete" class="hidden" forField={@forField.id} {@rest} ></span>
     """
   end
 
@@ -31,7 +31,7 @@ defmodule TodoTrekWeb.AwesompleteComponents do
       |> assign(:forField, %{id: for_id})
       |> assign_new(:id, fn -> for_id <> "-autocomplete" end)
     ~H"""
-    <span id={@id} phx-hook="Autocomplete" forField={@forField.id} {@rest} ></span>
+    <span id={@id} phx-hook="Autocomplete" class="hidden" forField={@forField.id} {@rest} ></span>
     """
   end
 
@@ -55,7 +55,7 @@ defmodule TodoTrekWeb.AwesompleteComponents do
       assigns
       |> assign_new(:id, fn -> copy2id_default_id(assigns.field.id, assigns.target) end)
     ~H"""
-    <span id={@id} phx-hook="AutocompleteCopyValueToId" field={@field.id} target={@target} {@rest} ></span>
+    <span id={@id} phx-hook="AutocompleteCopyValueToId" class="hidden" field={@field.id} target={@target} {@rest} ></span>
     """
   end
 
@@ -66,7 +66,7 @@ defmodule TodoTrekWeb.AwesompleteComponents do
       |> assign(:field, %{id: for_id})
       |> assign_new(:id, fn -> copy2id_default_id(for_id, assigns.target) end)
     ~H"""
-    <span id={@id} phx-hook="AutocompleteCopyValueToId" field={@field.id} target={@target} {@rest} ></span>
+    <span id={@id} phx-hook="AutocompleteCopyValueToId" class="hidden" field={@field.id} target={@target} {@rest} ></span>
     """
   end
 
@@ -85,20 +85,7 @@ defmodule TodoTrekWeb.AwesompleteComponents do
       assigns
       |> assign_new(:id, fn -> "awe-" <> assigns.sourceField.id <> "-2fld-" <> assigns.targetField.id end)
     ~H"""
-    <span id={@id} phx-hook="AutocompleteCopyValueToId" field={@sourceField.id} targetField={@targetField.id} {@rest} ></span>
-    """
-  end
-
-  @doc """
-  Transfer ownership of the DOM from LiveView to custom javascript code after the initial rendering.
-  Another way to set phx-update="ignore" without scattering this phx attribute in the templates.
-  """
-  attr :id, :string, required: true 
-  attr :rest, :global
-  slot :inner_block
-  def release_dom(assigns) do
-    ~H"""
-    <span id={@id} phx-update="ignore" {@rest} ><%= render_slot(@inner_block) %></span>
+    <span id={@id} phx-hook="AutocompleteCopyValueToId" class="hidden" field={@sourceField.id} targetField={@targetField.id} {@rest} ></span>
     """
   end
 

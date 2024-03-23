@@ -24,7 +24,6 @@ defmodule TodoTrekWeb.CoreComponents do
   defdelegate autocomplete(assigns), to: @awesomplete
   defdelegate copy_value_to_id(assigns), to: @awesomplete
   defdelegate copy_value_to_field(assigns), to: @awesomplete
-  defdelegate release_dom(assigns), to: @awesomplete
 
   @doc """
   Renders a modal.
@@ -659,6 +658,20 @@ defmodule TodoTrekWeb.CoreComponents do
   """
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
+  end
+
+
+  @doc """
+  Transfer ownership of the DOM from LiveView to custom javascript code after the initial rendering.
+  Another way to set phx-update="ignore" without scattering this phx attribute in the templates.
+  """
+  attr :id, :string, required: true 
+  attr :rest, :global
+  slot :inner_block
+  def release_dom(assigns) do
+    ~H"""
+    <span id={@id} phx-update="ignore" {@rest} ><%= render_slot(@inner_block) %></span>
+    """
   end
 
 end
