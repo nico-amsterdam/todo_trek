@@ -75,8 +75,10 @@ Hooks.SortableInputsFor = {
 
 // Do not add separator after selection in a multi select.
 replaceRemoveLastSeparator = function(replaceText) { // cannot use arrow function, because access to 'this' is needed.
-  // if multiple="@" then @ + space was added. Here the @ is removed.
+  // If multiple="@" then @ + space was added. Here the @ is removed.
   if (replaceText) replaceText = replaceText.substring(0, replaceText.length - 2) + ' ';
+  // don't remove the leading separator if there is one
+  if (this.input.value.charAt(0) === '@' && replaceText.charAt(0) !== '@') replaceText = '@' + replaceText
   this.input.value = replaceText;
 }
 
