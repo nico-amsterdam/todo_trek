@@ -19,7 +19,7 @@ defmodule TodoTrekWeb.CoreComponents do
   alias Phoenix.LiveView.JS
   import TodoTrekWeb.Gettext
 
-  @awesomplete TodoTrekWeb.AwesompleteComponents
+  @awesomplete PhoenixFormAwesomplete.HookComponent
 
   defdelegate autocomplete(assigns), to: @awesomplete
   defdelegate copy_value_to_id(assigns), to: @awesomplete

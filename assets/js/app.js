@@ -75,17 +75,18 @@ Hooks.SortableInputsFor = {
 
 // Do not add separator after selection in a multi select.
 replaceRemoveLastSeparator = function(replaceText) { // cannot use arrow function, because access to 'this' is needed.
-  // If multiple="@" then @ + space was added. Here the @ is removed.
+  // If multiple="@" then @ + space was added. Here the @ will be removed.
   if (replaceText) replaceText = replaceText.substring(0, replaceText.length - 2) + ' ';
-  // don't remove the leading separator if there is one
+  // don't remove the leading separator @ if there is one
   if (this.input.value.charAt(0) === '@' && replaceText.charAt(0) !== '@') replaceText = '@' + replaceText
   this.input.value = replaceText;
 }
 
 // compare only the first word after the last @ sign of the input with the suggestions
 convertInputFirstWordAfterAtSign = function(inputText) { // cannot use arrow function, because access to 'this' is needed.
-  // do not compare if there is no @ in the input
-  if (!this.input.value.includes('@')) return '';
+  var currentVal = this.input.value.trim(), pos = currentVal.indexOf('@') // currentVal is the complete input, not just the last part of a multiple.
+  // do not compare input with suggestions, if there is no @ in the input or when the first found @ is the last character.
+  if (pos < 0 || pos === currentVal.length - 1) return '';
   // search till the first space
   if (inputText.includes(' ')) inputText = inputText.substring(0, inputText.indexOf(' '))
   return AwesompleteUtil.convertInput(inputText);
