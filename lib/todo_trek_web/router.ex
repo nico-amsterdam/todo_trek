@@ -9,7 +9,7 @@ defmodule TodoTrekWeb.Router do
         |> Keyword.fetch!(:host)
 
   @content_security_policy "default-src 'self';" <>
-     "connect-src ws://#{@host}:* https://restcountries.com/v2/all;" <>
+     "connect-src ws://#{@host}:* https://restcountries.com/v2/all https://api.github.com/search/users;" <>
      "style-src  'self' 'unsafe-inline';" <> 
      "script-src 'self';" <>
      "img-src    'self' blob: data:;" <>
