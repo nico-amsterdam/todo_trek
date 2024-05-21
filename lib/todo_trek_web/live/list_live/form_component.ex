@@ -19,9 +19,9 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
           <.input field={@form[:title]} type="text" />
           <.release_dom id={"#{@form[:country].id}-domspace"} >
 
-            <.input field={@form[:country]} type="text" placeholder="Country autocomplete test" autocomplete="off" />
+            <.input field={@form[:country]} type="text" placeholder="Country autocomplete test" />
 
-            <.input field={@form[:capital]} type="text" placeholder="Capital autocomplete test" autocomplete="off" />
+            <.input field={@form[:capital]} type="text" placeholder="Capital autocomplete test" />
 
              <div id="awe-capital"></div>
 
