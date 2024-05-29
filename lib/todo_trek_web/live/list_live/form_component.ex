@@ -32,7 +32,7 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
                 <.icon name="hero-bars-3" class="w-6 h-6 relative top-2" data-handle />
                 <.input type="autocomplete" field={f_nested[:email]} placeholder="email" phx-debounce="blur" />
                 <.autocomplete forField={f_nested[:email]}
-                      url="https://raw.githubusercontent.com/nico-amsterdam/awesomplete-util/gh-pages/json/countries.json"
+                      url="https://nico-amsterdam.github.io/awesomplete-util/json/countries.json"
                       loadall="true"
                       prepop="true"
                       minChars="1" 

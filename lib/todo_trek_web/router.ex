@@ -9,7 +9,7 @@ defmodule TodoTrekWeb.Router do
         |> Keyword.fetch!(:host)
 
   @content_security_policy "default-src 'self';" <>
-     "connect-src ws://#{@host}:* https://api.github.com/search/users https://raw.githubusercontent.com/nico-amsterdam/;" <>
+     "connect-src ws://#{@host}:* https://api.github.com/search/users https://nico-amsterdam.github.io/awesomplete-util/json/;" <>
      "style-src  'self' 'unsafe-inline';" <> 
      "script-src 'self';" <>
      "img-src    'self' blob: data:;" <>
