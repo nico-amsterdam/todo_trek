@@ -16,120 +16,8 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
         phx-submit="save"
       >
         <div class="space-y-4 mb-6">
-          <.input field={@form[:title]} type="text" />
-          <.release_dom id={"#{@form[:country].id}-domspace"} >
+          <.input field={@form[:title]} type="text" phx-debounce="blur" />
 
-            <.input field={@form[:country]} type="text" placeholder="Country autocomplete test" />
-
-            <.input field={@form[:capital]} type="text" placeholder="Capital autocomplete test" />
-
-            <div id="awe-capital"></div>
-
-
-             <.copy_value_to_id
-                 field={@form[:country]}
-                 dataField="capital"
-                 target="#awe-capital"
-                 />
-
-             <.copy_value_to_id
-                 field={@form[:capital]}
-                 dataField="capital"
-                 target="#awe-capital"
-                 />
-
-             <.copy_value_to_field
-                 sourceField={@form[:country]}
-                 dataField="capital"
-                 targetField={@form[:capital]}
-                 />
-
-             <.copy_value_to_field
-                 sourceField={@form[:capital]}
-                 dataField="name"
-                 targetField={@form[:country]}
-                 />
-
-            <.autocomplete    forField={@form[:country]}
-                              url="https://restcountries.com/v2/all"
-                              loadall="true"
-                              prepop="true"
-                              minChars="1" 
-                              maxItems="8" 
-                              value="name"     
-                              descr="capital"
-                              descrSearch="true"
-                              />
-
-            <.autocomplete    forField={@form[:capital]}
-                              url="https://restcountries.com/v2/all"
-                              loadall="true"
-                              prepop="true"
-                              minChars="1" 
-                              maxItems="8" 
-                              value="capital"
-                              />
-
-            <.input field={@form[:color]} type="text" placeholder="Color autocomplete test" />
-
-            <.autocomplete 
-              forField={@form[:color]}
-              minChars="1"
-              filter="filterContains"
-              list="listWithLabels"   
-            />
-
-            <.input field={@form[:alphabet]} type="text" placeholder="Make a sentence with all letters of the alphabet" />
-
-            <.autocomplete
-              forField={@form[:alphabet]}
-              minChars="1"
-              multiple=" ,"
-              list="The,quick,brown,fox,jumps,over,the,lazy,dog,Pack,my,box,with,five,dozen,liquor,jugs"   
-            />
-
-
-            <.input field={@form[:textwithreferences]} type="textarea" placeholder="Write a text and use @ to reference people" />
-
-            <datalist id="peoplelist">
-              <option>Ada</option>
-              <option>Beyonce</option>
-              <option>Chris</option>
-              <option>Danny</option>
-              <option>Edward</option>
-              <option>Frank</option>
-              <option>Gerard</option>
-              <option>Hanna</option>
-              <option>Iris</option>
-              <option>John</option>
-              <option>Kate</option>
-              <option>Leo</option>
-              <option>Max</option>
-              <option>Neo</option>
-              <option>Olivia</option>
-              <option>Penny</option>
-              <option>Quincey</option>
-              <option>Ryan</option>
-              <option>Sarah</option>
-              <option>Tara</option>
-              <option>Umar</option>
-              <option>Veronica</option>
-              <option>Wendy</option>
-              <option>Xena</option>
-              <option>Yasmine</option>
-              <option>Zara</option>
-            </datalist>
-            <.autocomplete
-              forField={@form[:textwithreferences]}
-              minChars="1"
-              multiple="@"
-              replace="replaceAtSign"
-              filter="filterAtSign"
-              convertInput="convertInputAtSign"
-              list="#peoplelist"   
-            />
-
-          </.release_dom>
           <label class="block cursor-pointer">
             <input type="checkbox" name="list[notifications_order][]" class="hidden" />
             <.icon name="hero-plus-circle" /> prepend
@@ -142,14 +30,20 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
               <div class="flex space-x-2 drag-item">
                 <input type="hidden" name="list[notifications_order][]" value={f_nested.index} />
                 <.icon name="hero-bars-3" class="w-6 h-6 relative top-2" data-handle />
-                <.input type="text" field={f_nested[:email]} placeholder="email" />
-                <.input type="text" field={f_nested[:name]} placeholder="name" />
+                <.input type="autocomplete" field={f_nested[:email]} placeholder="email" phx-debounce="blur" />
+                <.autocomplete forField={f_nested[:email]}
+                      url="https://raw.githubusercontent.com/nico-amsterdam/awesomplete-util/gh-pages/json/countries.json"
+                      loadall="true"
+                      prepop="true"
+                      minChars="1" 
+                      maxItems="8" 
+                      value="name"
+                      />
+                <.input type="text" field={f_nested[:name]} placeholder="name" phx-debounce="blur" />
                 <label>
                   <input
                     type="checkbox"
-                    name="list[
-                      \
-                    ][]"
+                    name="list[notifications_delete][]"
                     value={f_nested.index}
                     class="hidden"
                   />

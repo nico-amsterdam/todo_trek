@@ -73,37 +73,14 @@ Hooks.SortableInputsFor = {
   }
 }
 
-// Do not add separator after selection in a multi select.
-replaceRemoveLastSeparator = function(replaceText) { // cannot use arrow function, because access to 'this' is needed.
-  // If multiple="@" then @ + space was added. Here the @ will be removed.
-  if (replaceText) replaceText = replaceText.substring(0, replaceText.length - 2) + ' ';
-  // don't remove the leading separator @ if there is one
-  if (this.input.value.charAt(0) === '@' && replaceText.charAt(0) !== '@') replaceText = '@' + replaceText
-  this.input.value = replaceText;
-}
-
-// compare only the first word after the last @ sign of the input with the suggestions
-convertInputFirstWordAfterAtSign = function(inputText) { // cannot use arrow function, because access to 'this' is needed.
-  var currentVal = this.input.value.trim(), pos = currentVal.indexOf('@') // currentVal is the complete input, not just the last part of a multiple.
-  // do not compare input with suggestions, if there is no @ in the input or when the first found @ is the last character.
-  if (pos < 0 || pos === currentVal.length - 1) return '';
-  // search till the first space
-  if (inputText.includes(' ')) inputText = inputText.substring(0, inputText.indexOf(' '))
-  return AwesompleteUtil.convertInput(inputText);
-}
-
-// don't show suggestions when there is no @ sign entered yet.
-filterAfterAtSign = function(data, input) { // cannot use arrow function, because access to 'this' is needed.
-  if (!this.input.value.includes('@')) return false;
-  return AwesompleteUtil.filterContains(data, input);
-}
 
 const AU = AwesompleteUtil
-, customAwesompleteContext = {
+    , customAwesompleteContext = {
+
   // These functions and objects can be referenced by name in the autocomplete function components.
   // This list can be customized.
 
-  filterContains:   AU.filterContains // default
+  filterContains:   AU.filterContains
 , filterStartsWith: AU.filterStartsWith
 , filterWords:      AU.filterWords
 , filterOff:        AU.filterOff
@@ -114,23 +91,18 @@ const AU = AwesompleteUtil
 , itemMarkAll:      AU.itemMarkAll   // also mark matching text inside the description
 , itemWords:        AU.itemWords     // mark matching words
 
-// add your custom functions and/or lists here
+  // add your custom functions and/or lists here
 
-, replaceAtSign:      replaceRemoveLastSeparator
-, convertInputAtSign: convertInputFirstWordAfterAtSign
-, filterAtSign:       filterAfterAtSign
-
-, listWithoutLabels: ['Ruby', 'Python']
-, listWithLabels: [{ label: '<b>black</b>',  value: 'black' },{ label: '<i>red</i>', value: 'red' },{ label: 'blueish', value: 'blue' }]
 }
 
 Hooks.Autocomplete = {
-   mounted() { attachAwesomplete(this.el, customAwesompleteContext, {} /* defaultSettings */ ) }
+  mounted() { attachAwesomplete(this.el, customAwesompleteContext, {} /* defaultSettings */ ) }
 }
 
 Hooks.AutocompleteCopyValueToId = {
   mounted() { copyValueToId(this.el) }
 }
+
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}, hooks: Hooks})

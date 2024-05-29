@@ -25,7 +25,6 @@ defmodule TodoTrekWeb.CoreComponents do
   defdelegate copy_value_to_id(assigns), to: @awesomplete
   defdelegate copy_value_to_field(assigns), to: @awesomplete
 
-
   @doc """
   Renders a modal.
 
@@ -243,6 +242,18 @@ defmodule TodoTrekWeb.CoreComponents do
   end
 
   @doc """
+  Renders errors for an input field that's inside phx-update=ignore
+  """
+  attr :forField, :any, required: true, doc: "Phoenix.HTML.FormField struct or field name."
+
+  def input_errors(%{forField: %Phoenix.HTML.FormField{}} = assigns) do
+    assigns =  assign(assigns, :errors, Enum.map(assigns.forField.errors, &translate_error(&1)))
+    ~H"""
+    <.error :for={msg <- @errors}><%= msg %></.error>
+    """
+  end
+
+  @doc """
   Renders an input with label and error messages.
 
   A `%Phoenix.HTML.Form{}` and field name may be passed to the input
@@ -263,7 +274,7 @@ defmodule TodoTrekWeb.CoreComponents do
 
   attr :type, :string,
     default: "text",
-    values: ~w(checkbox color date datetime-local email file hidden month number password
+    values: ~w(autocomplete checkbox color date datetime-local email file hidden month number password
                range radio search select tel text textarea time url week)
 
   attr :field, Phoenix.HTML.FormField,
@@ -348,6 +359,32 @@ defmodule TodoTrekWeb.CoreComponents do
         ]}
         {@rest}
       ><%= Phoenix.HTML.Form.normalize_value("textarea", @value) %></textarea>
+      <.error :for={msg <- @errors}><%= msg %></.error>
+    </div>
+    """
+  end
+
+  def input(%{type: "autocomplete"} = assigns) do
+    assigns = assign(assigns, span_id: assigns.id <> "-domspace")
+    ~H"""
+    <div phx-feedback-for={@name}>
+      <.label for={@id}><%= @label %></.label>
+      <span phx-update="ignore" id={@span_id}> 
+        <input
+          type="text"
+          name={@name}
+          id={@id}
+          value={Phoenix.HTML.Form.normalize_value(@type, @value)}
+          class={[
+            "block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
+            @border && "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
+            @border && "border-zinc-300 focus:border-zinc-400",
+            if(!@border, do: "border-0"),
+            if(@strike_through, do: "line-through")
+          ]}
+          {@rest}
+        />
+      </span> 
       <.error :for={msg <- @errors}><%= msg %></.error>
     </div>
     """
@@ -660,19 +697,4 @@ defmodule TodoTrekWeb.CoreComponents do
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
   end
-
-
-  @doc """
-  Transfer ownership of the DOM from LiveView to custom javascript code after the initial rendering.
-  Another way to set phx-update="ignore" without scattering this phx attribute in the templates.
-  """
-  attr :id, :string, required: true 
-  attr :rest, :global
-  slot :inner_block
-  def release_dom(assigns) do
-    ~H"""
-    <span id={@id} phx-update="ignore" {@rest} ><%= render_slot(@inner_block) %></span>
-    """
-  end
-
 end

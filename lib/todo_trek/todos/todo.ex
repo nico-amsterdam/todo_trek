@@ -6,8 +6,6 @@ defmodule TodoTrek.Todos.Todo do
     field :status, Ecto.Enum, values: [:started, :completed], default: :started
     field :title, :string
     field :position, :integer
-    field :country, :string, virtual: true
-    field :capital, :string, virtual: true
 
     belongs_to :list, TodoTrek.Todos.List
     belongs_to :user, TodoTrek.Accounts.User
