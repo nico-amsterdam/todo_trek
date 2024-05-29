@@ -3,7 +3,7 @@ import Config
 # Configure your database
 config :todo_trek, TodoTrek.Repo,
   username: "postgres",
-  password: "keukendief",
+  password: "postgres",
   hostname: "localhost",
   database: "forms_dev",
   stacktrace: true,
