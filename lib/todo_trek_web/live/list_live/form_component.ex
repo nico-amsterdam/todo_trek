@@ -36,8 +36,7 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
                                        prepop: true,
                                        minChars: 1, 
                                        maxItems: 8, 
-                                       value: "name",
-                                       csp_nonce: @script_src_nonce
+                                       value: "name"
                                     }) %>
                    </div>
                 </div>
@@ -57,8 +56,7 @@ defmodule TodoTrekWeb.ListLive.FormComponent do
                                prepop: true,
                                minChars: 1, 
                                maxItems: 8, 
-                               value: "name",
-                               csp_nonce: @script_src_nonce
+                               value: "name"
                             }) %>
 
                 </span>
