@@ -63,17 +63,11 @@ Hooks.RunScript = {
         scriptList.forEach( scriptNode => {
             let doRunScript = document.createElement('script')
 
-            //copy over the attributes, including nonce and src
+            //copy over the attributes, including src
             if (scriptNode.hasAttributes()) {
                 for (const attr of scriptNode.attributes) {
                     // console.log(attr.nodeName + ' === ' + attr.nodeValue)
-                    if (attr.nodeName === 'nonce') {  // the value of the nonce is not kept in the DOM tree, hence it must be set differently.
-                      // There is no real safe way transfer the nonce to javascript to protect against XSS attacks which also uses javascript.
-                      // So this is a dead end; don't use script tags in liveview componenents and do not use an unsafe eval in your phx-hook.
-                      doRunScript.setAttribute("nonce", document.doNOTdoThis_ItIsReallyUnsafeToKeepTheNonce )
-                    } else {
-                      doRunScript.setAttribute(attr.nodeName, attr.nodeValue)
-                    }
+                    doRunScript.setAttribute(attr.nodeName, attr.nodeValue)
                 }
             }
 

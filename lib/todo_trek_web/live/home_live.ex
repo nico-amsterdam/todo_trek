@@ -16,9 +16,6 @@ defmodule TodoTrekWeb.HomeLive do
         </:actions>
       </.header>
       <%= raw(inspect assigns.script_src_nonce) %>
-      <span phx-update="ignore" id="dontdothis"><script nonce={@script_src_nonce} >
-          document.doNOTdoThis_ItIsReallyUnsafeToKeepTheNonce = "<%= assigns.script_src_nonce %>"; 
-      </script></span>
       <div
         id="lists"
         phx-update="stream"

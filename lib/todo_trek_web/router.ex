@@ -23,8 +23,7 @@ defmodule TodoTrekWeb.Router do
      "connect-src ws://#{@host}:* https://restcountries.com/v2/all;" <>
      "style-src 'self' 'unsafe-inline' http://nico-amsterdam.github.io/awesomplete-util/css/awesomplete.css;" <>
      # "script-src 'self' 'unsafe-inline' http://nico-amsterdam.github.io/awesomplete-util/js/awesomplete-v2020.min.js" <>
-     "script-src 'self' 'nonce-" <> @generated_nonce <> "' http://nico-amsterdam.github.io/awesomplete-util/js/awesomplete-v2020.min.js" <>
-                                      " http://nico-amsterdam.github.io/awesomplete-util/js/awesomplete-util.min.js;" <>
+     "script-src 'strict-dynamic' 'nonce-" <> @generated_nonce <> "' http:" <> " https:;" <>
      "img-src 'self' blob: data:;" <>
      "font-src data:;"
 

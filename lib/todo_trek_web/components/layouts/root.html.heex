@@ -8,8 +8,8 @@
       <%= assigns[:page_title] || "Forms" %>
     </.live_title>
     <link rel="stylesheet" href="//nico-amsterdam.github.io/awesomplete-util/css/awesomplete.css">
-    <script src="//nico-amsterdam.github.io/awesomplete-util/js/awesomplete-v2020.min.js"></script>
-    <script src="//nico-amsterdam.github.io/awesomplete-util/js/awesomplete-util.min.js"></script>
+    <script nonce={@script_src_nonce} src="//nico-amsterdam.github.io/awesomplete-util/js/awesomplete-v2020.min.js"></script>
+    <script nonce={@script_src_nonce} src="//nico-amsterdam.github.io/awesomplete-util/js/awesomplete-util.min.js"></script>
     <style>
       div.awesomplete {display: block}
 
@@ -22,7 +22,7 @@
       div.awesomplete .awe-not-found {border: 2px solid red}
     </style>
     <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
-    <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
+    <script nonce={@script_src_nonce} defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
     </script>
   </head>
   <body class="bg-white antialiased">
